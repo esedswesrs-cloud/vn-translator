@@ -1,0 +1,750 @@
+/* VNTranslate — tema modern
+ * Sistem warna: brand gradient indigo → violet. Semua class lama dipertahankan
+ * agar JS tidak rusak; hanya tampilan yang dipercantik.
+ */
+:root, [data-theme="light"] {
+  --bg: #f4f5fb;
+  --bg-glow-1: rgba(99, 102, 241, 0.10);
+  --bg-glow-2: rgba(168, 85, 247, 0.08);
+  --card: #ffffff;
+  --card-2: #fafbff;
+  --ink: #1b2340;
+  --ink-soft: #3c4767;
+  --muted: #6f7a99;
+  --line: #e6e9f5;
+  --brand: #6366f1;
+  --brand-2: #8b5cf6;
+  --brand-dark: #4f46e5;
+  --brand-ink: #ffffff;
+  --ok: #16a34a;
+  --ok-bg: #e7f7ee;
+  --warn: #b45309;
+  --warn-bg: #fdf3e3;
+  --danger: #dc2626;
+  --danger-bg: #fdecec;
+  --radius: 14px;
+  --radius-s: 9px;
+  --input-bg: #ffffff;
+  --hover-bg: #eef0fe;
+  --track: #e9edf8;
+  --kbd-bg: #eef0fe;
+  --notice-bg: #fffaf0;
+  --notice-border: #f0d9a8;
+  --notice-ink: #7a5b1e;
+  --notice-blue-bg: #f1f5ff;
+  --notice-blue-border: #b9ccff;
+  --notice-blue-ink: #2c4a9e;
+  --drop-bg: #fafbff;
+  --shadow: 0 1px 2px rgba(27, 35, 64, 0.05), 0 8px 24px -12px rgba(99, 102, 241, 0.18);
+  --shadow-lg: 0 2px 6px rgba(27, 35, 64, 0.06), 0 18px 44px -16px rgba(99, 102, 241, 0.28);
+  --topbar-bg: rgba(255, 255, 255, 0.82);
+}
+[data-theme="dark"] {
+  --bg: #0d1120;
+  --bg-glow-1: rgba(99, 102, 241, 0.14);
+  --bg-glow-2: rgba(168, 85, 247, 0.10);
+  --card: #161c33;
+  --card-2: #1a2138;
+  --ink: #eef1fb;
+  --ink-soft: #c3cbE6;
+  --muted: #8f99b8;
+  --line: #28304f;
+  --brand: #818cf8;
+  --brand-2: #a78bfa;
+  --brand-dark: #a5b4fc;
+  --brand-ink: #141838;
+  --ok: #4ade80;
+  --ok-bg: rgba(74, 222, 128, 0.12);
+  --warn: #fbbf24;
+  --warn-bg: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.12);
+  --input-bg: #1a2138;
+  --hover-bg: #232c4e;
+  --track: #28304f;
+  --kbd-bg: #232c4e;
+  --notice-bg: #2a2410;
+  --notice-border: #6b5a2e;
+  --notice-ink: #ecd193;
+  --notice-blue-bg: #1a2347;
+  --notice-blue-border: #3d56c9;
+  --notice-blue-ink: #a9bbff;
+  --drop-bg: #141a30;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px -14px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.35), 0 22px 50px -16px rgba(0, 0, 0, 0.6);
+  --topbar-bg: rgba(13, 17, 32, 0.82);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  background-image:
+    radial-gradient(720px 320px at 12% -4%, var(--bg-glow-1), transparent 70%),
+    radial-gradient(640px 300px at 88% 2%, var(--bg-glow-2), transparent 70%);
+  background-attachment: fixed;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+/* ---------- header ---------- */
+header.topbar {
+  background: var(--topbar-bg);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.logo {
+  font-weight: 800;
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(120deg, var(--brand), var(--brand-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+.logo small {
+  font-size: 11px;
+  display: block;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  -webkit-text-fill-color: var(--muted);
+  color: var(--muted);
+}
+.ver-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  padding: 3px 8px;
+  border-radius: 999px;
+  vertical-align: middle;
+  background: var(--chip);
+  -webkit-text-fill-color: var(--muted);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+nav.tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: 10px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 4px;
+}
+nav.tabs button {
+  border: none;
+  background: none;
+  padding: 8px 16px;
+  border-radius: 99px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+nav.tabs button:hover { color: var(--ink); }
+nav.tabs button.active {
+  background: linear-gradient(120deg, var(--brand), var(--brand-2));
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 12px -4px rgba(99, 102, 241, 0.5);
+}
+[data-theme="dark"] nav.tabs button.active { color: #141838; }
+.topbar .spacer { flex: 1; }
+.theme-sel {
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 99px;
+  padding: 7px 12px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+/* ---------- layout ---------- */
+main { max-width: 1120px; margin: 0 auto; padding: 28px 18px 70px; }
+.view { display: none; }
+.view.active { display: block; animation: fadeUp 0.28s ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+/* ---------- kartu ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+}
+.card h2 {
+  margin: 0 0 10px;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+.card h3 { letter-spacing: -0.01em; }
+.muted { color: var(--muted); font-size: 13px; }
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  border: none;
+  background: linear-gradient(130deg, #4f46e5 0%, #7c3aed 55%, #a855f7 100%);
+  color: #fff;
+  padding: 34px 30px;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(420px 200px at 85% 15%, rgba(255, 255, 255, 0.22), transparent 70%),
+    radial-gradient(360px 220px at 8% 90%, rgba(255, 255, 255, 0.12), transparent 70%);
+  pointer-events: none;
+}
+.hero > * { position: relative; }
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+.hero p { margin: 0 0 18px; color: rgba(255, 255, 255, 0.88); font-size: 14.5px; max-width: 640px; line-height: 1.65; }
+.hero .stats { display: flex; gap: 26px; flex-wrap: wrap; }
+.hero .stat b { display: block; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.hero .stat span { font-size: 12px; color: rgba(255, 255, 255, 0.78); text-transform: uppercase; letter-spacing: 0.08em; }
+.hero .kbd { background: rgba(255, 255, 255, 0.18); color: #fff; }
+/* ---------- dropzone ---------- */
+.dropzone {
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 44px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--drop-bg);
+  color: var(--ink);
+}
+.dropzone:hover, .dropzone.over {
+  border-color: var(--brand);
+  background: var(--hover-bg);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+  transform: translateY(-1px);
+}
+.dropzone .big { font-size: 44px; margin-bottom: 6px; }
+/* ---------- tombol ---------- */
+.btn {
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  padding: 9px 17px;
+  border-radius: var(--radius-s);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.16s ease;
+}
+.btn:hover { border-color: var(--brand); transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn:active { transform: translateY(0); }
+.btn.primary {
+  background: linear-gradient(120deg, var(--brand), var(--brand-2));
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 6px 16px -6px rgba(99, 102, 241, 0.55);
+}
+[data-theme="dark"] .btn.primary { color: #141838; }
+.btn.primary:hover { filter: brightness(1.07); box-shadow: 0 8px 20px -6px rgba(99, 102, 241, 0.65); }
+.btn.danger { color: var(--danger); }
+.btn.danger:hover { border-color: var(--danger); background: var(--danger-bg); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+/* ---------- toolbar & progress ---------- */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.toolbar .spacer { flex: 1; }
+.progress-wrap { display: flex; align-items: center; gap: 10px; }
+.progress {
+  height: 10px;
+  background: var(--track);
+  border-radius: 99px;
+  overflow: hidden;
+  min-width: 160px;
+}
+.progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  width: 0%;
+  transition: width 0.25s ease;
+  border-radius: 99px;
+}
+/* ---------- tabel segmen ---------- */
+table.seg { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.seg th {
+  text-align: left;
+  padding: 10px 10px;
+  border-bottom: 2px solid var(--line);
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+table.seg td {
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+table.seg tbody tr { transition: background 0.12s; }
+table.seg tbody tr:hover { background: var(--card-2); }
+table.seg tr.done td.src { color: var(--muted); }
+.src { white-space: pre-wrap; word-break: break-word; line-height: 1.55; }
+textarea.tr {
+  width: 100%;
+  min-height: 54px;
+  border: 1px solid var(--line);
+  background: var(--input-bg);
+  color: var(--ink);
+  border-radius: var(--radius-s);
+  padding: 9px 11px;
+  font: inherit;
+  line-height: 1.55;
+  resize: vertical;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+textarea.tr:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+}
+/* ---------- badge ---------- */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--hover-bg);
+  color: var(--brand-dark);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.badge.ok { background: var(--ok-bg); color: var(--ok); }
+.badge.soon { background: var(--warn-bg); color: var(--warn); }
+.badge.kind { background: var(--hover-bg); color: var(--muted); }
+.line-no { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.row-actions { display: flex; gap: 4px; }
+.mini {
+  border: 1px solid var(--line);
+  background: var(--input-bg);
+  color: var(--ink);
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.14s;
+}
+.mini:hover { border-color: var(--brand); color: var(--brand-dark); }
+/* ---------- filter & input ---------- */
+.filters { display: flex; gap: 6px; align-items: center; }
+.filters input[type="search"] {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  padding: 9px 13px;
+  font: inherit;
+  min-width: 220px;
+  background: var(--input-bg);
+  color: var(--ink);
+}
+select, input[type="text"], input[type="password"] {
+  border: 1px solid var(--line);
+  background: var(--input-bg);
+  color: var(--ink);
+  border-radius: var(--radius-s);
+  padding: 9px 12px;
+  font: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+select:focus, input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+.form-grid { display: grid; gap: 14px; max-width: 560px; }
+.form-grid label { font-size: 13px; font-weight: 600; display: grid; gap: 6px; }
+/* ---------- notice ---------- */
+.notice {
+  border: 1px solid var(--notice-border);
+  border-left-width: 4px;
+  background: var(--notice-bg);
+  color: var(--notice-ink);
+  border-radius: 10px;
+  padding: 11px 15px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.notice.blue {
+  border-color: var(--notice-blue-border);
+  border-left-color: var(--brand);
+  background: var(--notice-blue-bg);
+  color: var(--notice-blue-ink);
+}
+/* ---------- tabel engine ---------- */
+table.engines { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.engines th, table.engines td {
+  padding: 11px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+table.engines tbody tr { transition: background 0.12s; }
+table.engines tbody tr:hover { background: var(--card-2); }
+table.engines th { color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; }
+/* ---------- modal ---------- */
+.modal-back {
+  position: fixed; inset: 0;
+  background: rgba(15, 20, 38, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.modal-back.open { display: flex; animation: fadeUp 0.2s ease; }
+.modal {
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px;
+  width: min(560px, 92vw);
+  max-height: 84vh;
+  overflow: auto;
+  box-shadow: var(--shadow-lg);
+}
+.modal h3 { margin-top: 0; letter-spacing: -0.01em; }
+.gloss-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.gloss-row input { flex: 1; }
+/* ---------- toast ---------- */
+.statusbar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: #1c2433;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 99px;
+  font-size: 13.5px;
+  font-weight: 500;
+  display: none;
+  z-index: 60;
+  max-width: 90vw;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.statusbar.show { display: block; opacity: 1; transform: translateX(-50%) translateY(0); }
+.statusbar.error { background: var(--danger); }
+.kbd {
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  background: var(--kbd-bg);
+  color: var(--ink);
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 12px;
+  border: 1px solid var(--line);
+}
+/* ---------- hasil pindai folder ---------- */
+.filerow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  flex-wrap: wrap;
+  border-radius: 8px;
+  transition: background 0.12s;
+}
+.filerow:hover { background: var(--card-2); }
+.filerow:last-child { border-bottom: none; }
+.filerow .path { flex: 1 1 200px; word-break: break-all; }
+.filerow .sz { color: var(--muted); white-space: nowrap; }
+.filerow .why { color: var(--muted); font-size: 12px; }
+.filerow .bdone { width: 22px; text-align: center; flex: 0 0 auto; }
+details.folderskip { overflow: hidden; }
+details.folderskip summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+/* ---------- analisis game ---------- */
+.analysis-card { border-left: 4px solid var(--brand); }
+/* ---------- pratinjau isi arsip ---------- */
+.prev-row {
+  display: flex;
+  gap: 10px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+  line-height: 1.55;
+  border-radius: 8px;
+}
+.prev-row:hover { background: var(--card-2); }
+.prev-row:last-child { border-bottom: none; }
+.prev-sp {
+  flex: 0 0 auto;
+  max-width: 140px;
+  font-weight: 700;
+  color: var(--brand-dark);
+  word-break: break-word;
+}
+.prev-tx { white-space: pre-wrap; word-break: break-word; }
+/* ---------- footer ---------- */
+footer.foot {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 26px 0 10px;
+}
+/* ---------- responsif ---------- */
+@media (max-width: 760px) {
+  /* header: satu baris ringkas, tab bisa digeser horizontal */
+  header.topbar { flex-wrap: nowrap; padding: 8px 12px; gap: 10px; }
+  .logo { font-size: 17px; flex: 0 0 auto; }
+  .logo small { display: none; }
+  nav.tabs { margin-left: 0; flex: 1 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  nav.tabs button { padding: 8px 12px; font-size: 13px; flex: 0 0 auto; }
+  .topbar .spacer { display: none; }
+  .theme-sel { flex: 0 0 auto; padding: 7px 9px; font-size: 12px; }
+
+  main { padding: 16px 10px 70px; }
+  .card { padding: 14px; margin-bottom: 14px; }
+  .card h2 { font-size: 17px; }
+
+  .hero { padding: 22px 18px; }
+  .hero h1 { font-size: 22px; }
+  .hero p { font-size: 13.5px; }
+  .hero .stats { gap: 16px; }
+  .hero .stat b { font-size: 20px; }
+
+  .dropzone { padding: 30px 14px; }
+  .dropzone .big { font-size: 34px; }
+
+  /* tabel editor -> kartu bertumpuk: asli di atas, terjemahan di bawah */
+  #editorMain table.seg thead { display: none; }
+  #editorMain table.seg,
+  #editorMain table.seg tbody,
+  #editorMain table.seg tr,
+  #editorMain table.seg td { display: block; width: 100%; }
+  #editorMain table.seg tr {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    padding: 6px 12px 10px;
+    margin-bottom: 10px;
+  }
+  #editorMain table.seg tbody tr:hover { background: none; }
+  #editorMain table.seg td { border-bottom: none; padding: 5px 0; }
+  #editorMain table.seg td.line-no {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  #editorMain table.seg td.line-no::before { content: "Baris "; }
+  #editorMain table.seg td.src { font-size: 13.5px; }
+  #editorMain .row-actions { margin-top: 6px; }
+  #editorMain .row-actions .mini { padding: 8px 14px; font-size: 14px; }
+
+  /* tabel arsip -> kolom ukuran disembunyikan, tombol dipadatkan */
+  #archiveMain table.seg { font-size: 13px; }
+  #archiveMain table.seg th:nth-child(3),
+  #archiveMain table.seg td:nth-child(3) { display: none; }
+  #archiveMain table.seg td:last-child { white-space: normal; }
+  #archiveMain .mini, #archiveMain table.seg td .btn { padding: 7px 10px; font-size: 12.5px; }
+
+  /* tabel engine -> daftar vertikal */
+  table.engines thead { display: none; }
+  table.engines,
+  table.engines tbody,
+  table.engines tr,
+  table.engines td { display: block; width: 100%; }
+  table.engines tr { padding: 8px 0; }
+  table.engines td { border-bottom: none; padding: 2px 0; }
+  table.engines td:nth-child(4) { font-size: 12.5px; }
+
+  /* toolbar & form */
+  .toolbar { gap: 6px; }
+  .btn { padding: 9px 13px; font-size: 13.5px; }
+  .progress { min-width: 0; flex: 1 1 120px; }
+  .filters { width: 100%; }
+  .filters input[type="search"] { flex: 1 1 auto; min-width: 0; }
+  .filters select { flex: 0 1 auto; max-width: 46%; }
+  /* font 16px di input: cegah auto-zoom yang mengganggu di iOS */
+  input[type="search"], input[type="text"], input[type="password"],
+  select, textarea.tr { font-size: 16px; }
+
+  /* baris "Bahasa sumber / target" di Pengaturan: susun vertikal di HP */
+  #view-settings .form-grid > div[style*="flex"] { flex-wrap: wrap; }
+  #view-settings .form-grid > div[style*="flex"] > label { flex: 1 1 150px; }
+
+  /* tab aktif: tanda panah ke bawah + posisi relatif untuk penandanya */
+  nav.tabs button { position: relative; }
+  nav.tabs button.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 3px;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+
+  /* header grup sticky menyesuaikan padding kartu mobile */
+  #uploadInfo .card h3.grouphead { margin: -14px -14px 10px; padding: 12px 14px; top: 60px; }
+
+  .modal { padding: 18px; }
+  .gloss-row { flex-wrap: wrap; }
+  #floatProg { right: 12px; bottom: 12px; font-size: 13px; padding: 9px 6px 9px 14px; }
+
+  /* ---------- opsi 2: bottom navigation ala aplikasi HP ---------- */
+  /* strip tab pindah ke bawah layar: ikon + label pendek per tab */
+  /* PENTING: backdrop-filter di header membentuk containing block baru
+     sehingga nav.tabs yang position:fixed akan menempel ke header
+     (muncul di atas & menutupi logo + pilihan tema), bukan ke viewport.
+     Matikan blur header khusus di HP agar fixed kembali relatif ke layar. */
+  header.topbar {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  nav.tabs {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--line);
+    background: var(--topbar-bg);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    overflow: visible;
+  }
+  nav.tabs button {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 7px 2px;
+    font-size: 10.5px;
+    font-weight: 600;
+    border-radius: 12px;
+    white-space: normal;
+    line-height: 1.2;
+    text-align: center;
+  }
+  nav.tabs button::before { font-size: 19px; line-height: 1; }
+  nav.tabs button[data-view="home"]::before { content: "🏠"; }
+  nav.tabs button[data-view="editor"]::before { content: "📝"; }
+  nav.tabs button[data-view="archive"]::before { content: "📦"; }
+  nav.tabs button[data-view="engines"]::before { content: "🧩"; }
+  nav.tabs button[data-view="settings"]::before { content: "⚙️"; }
+  /* panah opsi 1 tidak dipakai di bottom nav */
+  nav.tabs button.active::after { display: none; }
+  /* header atas tinggal logo + tema */
+  .topbar .spacer { display: block; }
+  /* ruang aman: konten, pil progres, dan toast tidak tertutup bottom nav */
+  main { padding: 16px 10px 120px; }
+  #floatProg { bottom: 92px; }
+  .statusbar { bottom: 92px; }
+}
+
+/* ---------- header grup engine: menempel saat scroll ---------- */
+/* Tombol "Kemas ulang" + counter N/M tetap terlihat walau daftar file panjang */
+#uploadInfo .card h3.grouphead {
+  position: sticky;
+  top: 64px;
+  z-index: 5;
+  background: var(--card);
+  margin: -22px -22px 12px;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--line);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+/* ---------- pil progres mengambang ---------- */
+/* Selalu terlihat saat batch terjemahan/poles berjalan; klik = lompat ke kartu progres */
+#floatProg {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(120deg, var(--brand), var(--brand-2));
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 8px 10px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.28);
+  cursor: pointer;
+  max-width: min(92vw, 460px);
+}
+#floatProg small { font-weight: 400; opacity: .85; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#floatProg button {
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,.22);
+  color: #fff;
+  font-weight: 700;
+  padding: 6px 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+
+
+/* 🔋 Bilah #mtProgress sebagai "baterai ngecas": warna mengisi dari kiri ke
+ * kanan sesuai persen, teks di atasnya. Oranye berdenyut saat jeda limit,
+ * hijau saat penuh/selesai. */
+#mtProgress.charging { position: relative; overflow: hidden; }
+#mtProgress .ch-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0%;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  transition: width .45s ease; }
+#mtProgress .ch-fill::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 42%, rgba(255,255,255,.5) 50%, transparent 58%);
+  background-size: 220% 100%; animation: chShine 1.5s linear infinite; }
+#mtProgress .ch-text { position: relative; z-index: 2; font-weight: 700;
+  text-shadow: 0 0 6px var(--card), 0 0 6px var(--card), 0 1px 2px var(--card); }
+#mtProgress.waiting { border-color: #f59e0b; }
+#mtProgress.waiting .ch-fill { background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  animation: chPulse 1.1s ease-in-out infinite; }
+#mtProgress.done { border-color: #16a34a; }
+#mtProgress.done .ch-fill { background: linear-gradient(90deg, #16a34a, #4ade80); }
+#mtProgress.done .ch-fill::after { display: none; }
+@keyframes chShine { from { background-position: 200% 0; } to { background-position: -120% 0; } }
+@keyframes chPulse { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.28); } }

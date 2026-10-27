@@ -1,0 +1,13 @@
+ast = {
+    text = {
+        [0] = {
+            name = { name = "Saki" },
+            { "Halo, apa kabar?", { "r" } },
+        },
+        [1] = {
+            select = { "Pergi keluar", "Tetap di sini" },
+            name = { name = "Ren" },
+            { "Baik-baik saja.", { "rt2" } },
+        },
+    },
+}

@@ -1,0 +1,9 @@
+# RealLive sample Seen.txt
+#seendsp 0
+「おはようございます」
+#cmd param=1
+今日はいい天気ですね。
+「そうですね」と彼女は答えた。
+
+#another command here
+最後の行です。

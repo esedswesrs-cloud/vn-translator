@@ -1,0 +1,9 @@
+; Sampel Naninovel
+# Start
+@back bg01
+Saki: Halo, selamat datang.
+Narasi biasa di sini.
+@choice "Pergi keluar" goto:.Outside
+@choice "Tetap di sini"
+# Outside
+Ren: Kita keluar sekarang.

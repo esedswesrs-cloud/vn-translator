@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VNTranslate — Penerjemah Script Visual Novel</title>
+<link rel="stylesheet" href="css/style.css?v=1.77">
+<script>
+/* Terapkan tema sebelum render untuk menghindari kedip */
+(function(){try{var m=localStorage.getItem("vntrans.theme")||"auto";
+var d=m==="dark"||(m==="auto"&&window.matchMedia("(prefers-color-scheme: dark)").matches);
+document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){}})();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">VNTranslate <span class="ver-badge" id="appVer" title="Versi web"></span><small>penerjemah script visual novel</small></div>
+  <nav class="tabs">
+    <button data-view="home" class="active">Beranda</button>
+    <button data-view="editor">Editor</button>
+    <button data-view="archive">Arsip</button>
+    <button data-view="engines">Daftar Engine</button>
+    <button data-view="settings">Pengaturan</button>
+  </nav>
+  <div class="spacer"></div>
+  <select id="themeSel" class="theme-sel" title="Tema tampilan">
+    <option value="auto">🌗 Otomatis</option>
+    <option value="light">🌞 Terang</option>
+    <option value="dark">🌙 Gelap</option>
+  </select>
+</header>
+
+<main>
+  <!-- BERANDA / UPLOAD -->
+  <section id="view-home" class="view active">
+    <div class="card hero">
+      <h1>🌸 VNTranslate</h1>
+      <p>Penerjemah script visual novel langsung di browser — tanpa install, tanpa upload ke server.
+        Ekstrak arsip <span class="kbd">.rpa</span> / <span class="kbd">.pfs</span> / <span class="kbd">.ypf</span> / <span class="kbd">.xp3</span>,
+        decompile <span class="kbd">.rpyc</span>, lalu terjemahkan massal dengan Gemini, DeepL, atau mesin gratis lainnya.</p>
+      <div class="stats">
+        <div class="stat"><b>11</b><span>Engine didukung</span></div>
+        <div class="stat"><b>29</b><span>Engine terdaftar</span></div>
+        <div class="stat"><b>100%</b><span>Proses di browser</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Mulai proyek baru</h2>
+      <p class="muted">Unggah file script game (mis. <span class="kbd">.rpy</span>, <span class="kbd">.ks</span>, <span class="kbd">.txt</span>)
+        atau arsip <span class="kbd">.ypf</span> (YU-RIS) / <span class="kbd">.xp3</span> (Kirikiri) —
+        atau sekalian satu <strong>folder</strong>, nanti web yang menyortir file mana yang bisa diterjemahkan.
+        Engine terdeteksi otomatis. Semua proses berjalan di browser — file tidak diunggah ke server mana pun.</p>
+      <div id="dropzone" class="dropzone">
+        <div class="big">📁</div>
+        <p><strong>Seret & letakkan file di sini</strong><br>atau klik untuk memilih file</p>
+        <input type="file" id="fileInput" hidden>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn" id="btnFolder">📁 Upload Folder</button>
+        <span class="muted" style="font-size:12px">Pindai folder game — web menyortir file mana yang bisa diterjemahkan.</span>
+        <input type="file" id="folderInput" webkitdirectory hidden>
+      </div>
+      <div id="uploadInfo" style="margin-top:12px"></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0">Proyek tersimpan</h2>
+        <button class="btn danger" id="btnWipeHome" style="display:none">🗑️ Hapus Semua</button>
+      </div>
+      <div id="projectList"><p class="muted">Belum ada proyek.</p></div>
+    </div>
+
+    <div class="card">
+      <h2>Cara pakai singkat</h2>
+      <ol class="muted" style="line-height:1.9">
+        <li>Unggah file script → engine terdeteksi otomatis (bisa diubah manual).</li>
+        <li>Terjemahkan manual di editor, atau pakai <strong>Terjemahan Mesin</strong> (DeepL Free / MyMemory / LibreTranslate).</li>
+        <li>Atur <strong>Glosarium</strong> untuk istilah yang harus konsisten (mis. nama karakter).</li>
+        <li>Klik <strong>Ekspor</strong> untuk mengunduh file script yang sudah diterjemahkan.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- EDITOR -->
+  <section id="view-editor" class="view">
+    <div id="editorEmpty" class="card">
+      <h2>Belum ada proyek aktif</h2>
+      <p class="muted">Unggah file script dulu dari tab <strong>Beranda</strong>, atau buka proyek tersimpan.</p>
+    </div>
+    <div id="editorMain" style="display:none">
+      <div class="card">
+        <div class="toolbar">
+          <div>
+            <strong id="edFileName">-</strong><br>
+            <span class="muted"><span id="edEngine" class="badge">-</span>
+            <span id="edEncoding" class="muted"></span></span>
+          </div>
+          <div class="spacer"></div>
+          <div class="progress-wrap">
+            <div class="progress"><div id="edProgressBar"></div></div>
+            <span id="edProgressText" class="muted">0%</span>
+          </div>
+        </div>
+        <div class="toolbar">
+          <button class="btn primary" id="btnAutoMT">⚡ Terjemahkan Otomatis</button>
+          <button class="btn" id="btnPolish" title="Perbaiki tata bahasa & kefasihan semua terjemahan dengan Gemini">✨ Poles kalimat</button>
+          <button class="btn" id="btnBatchFolder" title="Terjemahkan semua file dari folder yang dipindai sekaligus">📁⚡ Semua file</button>
+          <button class="btn" id="btnGlossary">📖 Glosarium</button>
+          <button class="btn" id="btnExport">⬇ Ekspor File</button>
+          <button class="btn" id="btnExportCSV">CSV</button>
+          <button class="btn" id="btnSaveProj">💾 Simpan</button>
+          <button class="btn" id="btnDownload" title="Unduh file terjemahan langsung dengan nama asli (tanpa _id, tanpa ZIP) — siap untuk repack">⬇ Unduh</button>
+          <div class="spacer"></div>
+          <div class="filters">
+            <input type="search" id="searchBox" placeholder="Cari teks...">
+            <select id="filterSel">
+              <option value="all">Semua</option>
+              <option value="empty">Belum diterjemahkan</option>
+              <option value="done">Sudah diterjemahkan</option>
+            </select>
+          </div>
+        </div>
+        <div id="edWarnings"></div>
+        <div id="mtProgress" class="notice blue charging" style="display:none"><div class="ch-fill" id="chFill"></div><span class="ch-text" id="chText"></span></div>
+      </div>
+      <div class="card" style="padding:8px">
+        <table class="seg">
+          <thead><tr>
+            <th style="width:44px">Baris</th>
+            <th style="width:44%">Teks asli</th>
+            <th>Terjemahan</th>
+            <th style="width:70px"></th>
+          </tr></thead>
+          <tbody id="segBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARSIP YPF -->
+  <section id="view-archive" class="view">
+    <div id="archiveEmpty" class="card">
+      <h2>Belum ada arsip dibuka</h2>
+      <p class="muted">Unggah file arsip (<span class="kbd">.ypf</span> YU-RIS atau <span class="kbd">.xp3</span> Kirikiri)
+        dari tab <strong>Beranda</strong> untuk melihat isinya dan mengekstrak file.</p>
+    </div>
+    <div id="archiveMain" style="display:none">
+      <div class="card">
+        <div class="toolbar">
+          <div>
+            <strong id="arcFileName">-</strong><br>
+            <span class="muted"><span id="arcEngine">-</span> · versi arsip <span id="arcVersion">-</span> · <span id="arcCount">-</span> file</span>
+          </div>
+          <div class="spacer"></div>
+          <button class="btn" id="btnArcScan" title="Pindai semua file script dan tandai yang berisi dialog">🔍 Pindai dialog</button>
+          <input type="search" id="arcSearch" placeholder="Cari file..." style="max-width:220px">
+        </div>
+        <div class="toolbar" id="arcYpfTools">
+          <button class="btn primary" id="btnArcTranslate">🌐 Terjemahkan .ybn yang dipilih</button>
+          <button class="btn" id="btnArcRepackYpf" disabled title="Aktif setelah ada file .ybn yang diterjemahkan & diekspor">📦 Kemas ulang .ypf</button>
+          <span class="muted" style="font-size:13px">Pilih file script, lalu terjemahkan langsung di editor.</span>
+        </div>
+        <div class="toolbar" id="arcXp3Tools" style="display:none">
+          <button class="btn primary" id="btnArcTranslateKs">⚡ Terjemahkan semua .ks</button>
+          <button class="btn" id="btnArcRepackXp3" disabled title="Aktif setelah ada file .ks yang diterjemahkan">📦 Kemas ulang .xp3</button>
+          <span class="muted" style="font-size:13px" id="arcXp3Count"></span>
+        </div>
+        <p class="muted" style="font-size:13px" id="arcXp3Hint">File <span class="kbd">.ks</span> bisa langsung diterjemahkan:
+          klik <strong>🌐 Terjemahkan</strong> di baris file-nya (buka editor), atau <strong>⚡ Terjemahkan semua .ks</strong> sekaligus.
+          Setelah selesai, klik <strong>📦 Kemas ulang .xp3</strong> — tidak perlu tool luar lagi.</p>
+        <table class="seg">
+          <thead><tr>
+            <th style="width:36px"><input type="checkbox" id="arcCheckAll" title="Pilih semua .ybn"></th>
+            <th>Nama file</th>
+            <th style="width:110px">Ukuran</th>
+            <th style="width:90px"></th>
+          </tr></thead>
+          <tbody id="arcBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAFTAR ENGINE -->
+  <section id="view-engines" class="view">
+    <div class="card">
+      <h2>Daftar Engine</h2>
+      <p class="muted">Engine bertanda <span class="badge ok">didukung</span> bisa langsung dipakai.
+        Sisanya menyusul di pembaruan berikutnya.</p>
+      <table class="engines">
+        <thead><tr><th>Engine</th><th>Ekstensi</th><th>Status</th><th>Keterangan</th></tr></thead>
+        <tbody id="engineBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PENGATURAN -->
+  <section id="view-settings" class="view">
+    <div class="card">
+      <h2>Pengaturan Terjemahan Mesin</h2>
+      <div class="form-grid">
+        <label>Penyedia
+          <select id="setProvider"></select>
+        </label>
+        <div id="provHelp" class="muted"></div>
+        <label>API key <span class="muted">(jika dibutuhkan)</span>
+          <input type="password" id="setKey" placeholder="tempel API key di sini">
+        </label>
+        <div id="quotaRow" style="display:none;align-items:center;gap:10px;flex-wrap:wrap">
+          <button class="btn" id="btnCheckQuota">📊 Cek Kuota DeepL</button>
+          <span id="quotaResult" class="muted"></span>
+        </div>
+        <label>Model Gemini <span class="muted">(khusus Gemini)</span>
+          <select id="setGeminiModel"></select>
+        </label>
+        <label>Endpoint LibreTranslate <span class="muted">(khusus LibreTranslate)</span>
+          <input type="text" id="setEndpoint" placeholder="https://libretranslate.com/translate">
+        </label>
+        <div style="display:flex;gap:12px">
+          <label>Bahasa sumber
+            <select id="setSrc"></select>
+          </label>
+          <label>Bahasa target
+            <select id="setTgt"></select>
+          </label>
+        </div>
+        <div><button class="btn primary" id="btnSaveSettings">Simpan Pengaturan</button></div>
+        <p class="muted">API key hanya disimpan di browser kamu (localStorage) dan hanya dikirim ke penyedia yang kamu pilih.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Data</h2>
+      <button class="btn danger" id="btnWipe">Hapus semua proyek tersimpan</button>
+      <p class="muted" style="margin:12px 0 0;font-size:13px">Versi web: <strong id="appVerSettings"></strong>
+        <span class="muted">— kalau nomornya bertambah setelah refresh, berarti kamu sudah dapat update terbaru.</span></p>
+    </div>
+  </section>
+</main>
+
+<!-- MODAL PRATINJAU ISI ARSIP -->
+<div class="modal-back" id="previewModal">
+  <div class="modal" style="width:min(700px,94vw)">
+    <h3 id="prevTitle">👁 Pratinjau</h3>
+    <div id="prevMeta" class="muted"></div>
+    <div id="prevBody" style="margin-top:10px"></div>
+    <div class="toolbar" style="margin-top:14px">
+      <button class="btn primary" id="btnPrevTranslate" style="display:none">🌐 Terjemahkan file ini</button>
+      <div class="spacer"></div>
+      <button class="btn" id="btnClosePrev">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GLOSARIUM -->
+<div class="modal-back" id="glossModal">
+  <div class="modal">
+    <h3>📖 Glosarium</h3>
+    <p class="muted">Istilah di sini diganti <em>sebelum</em> dikirim ke mesin penerjemah, dan berlaku untuk semua segmen. Cocok untuk nama karakter & istilah khas.</p>
+    <div id="glossRows"></div>
+    <div class="toolbar">
+      <button class="btn" id="btnAddGloss">+ Tambah istilah</button>
+      <div class="spacer"></div>
+      <button class="btn primary" id="btnSaveGloss">Simpan</button>
+      <button class="btn" id="btnCloseGloss">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<div class="statusbar" id="statusbar"></div>
+
+<footer class="foot">VNTranslate — file tidak pernah meninggalkan browser kamu 🌸</footer>
+
+<script src="js/vendor/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/encoding-japanese@2.2.0/encoding.min.js"></script>
+<script type="module" src="js/app.js?v=1.77"></script>
+</body>
+</html>

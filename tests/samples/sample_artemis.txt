@@ -1,0 +1,11 @@
+; Sampel Artemis TXT
+*start
+[bg storage="bg01"]
+[name Saki]
+Halo, selamat datang.
+Apa kabar hari ini?
+
+[name Ren]
+Baik-baik saja.
+[sel_text text="Pergi keluar"]
+[sel_text text="Tetap di sini"]

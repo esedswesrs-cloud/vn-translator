@@ -1,0 +1,10 @@
+astver = "2.0"
+ast = {
+    [0] = {
+        text = { ja = { { name = { "Yuki" }, "Selamat pagi." } } },
+        select = { ja = { "Ya", "Tidak" } },
+    },
+    [1] = {
+        text = { ja = { { "Hari yang cerah." } } },
+    },
+}
